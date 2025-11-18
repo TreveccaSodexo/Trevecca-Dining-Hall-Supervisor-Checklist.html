@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trevecca DH Daily Checklist</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --trevecca-purple: #4B2E83;
+      --trevecca-light: #f3f0fb;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    .app {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .header {
+      text-align: center;
+      padding: 16px;
+      background: var(--trevecca-purple);
+      color: #fff;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .header h2 {
+      margin: 4px 0 0;
+      font-size: 0.9rem;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    .lang-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .lang-btn {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #fff;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: #fff;
+      color: var(--trevecca-purple);
+      font-weight: 600;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--trevecca-purple);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-subtitle {
+      font-size: 0.8rem;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .field {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: #555;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 0.85rem;
+    }
+
+    .checklist {
+      margin-top: 4px;
+    }
+
+    .check-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 8px;
+      gap: 4px;
+    }
+
+    .check-item label {
+      font-size: 0.8rem;
+    }
+
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill {
+      padding: 5px 9px;
+      font-size: 0.75rem;
+      border-radius: 999px;
+      border: 1px solid #ccc;
+      background: #fafafa;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .pill.selected {
+      background: var(--trevecca-purple);
+      color: #fff;
+      border-color: var(--trevecca-purple);
+      font-weight: 600;
+    }
+
+    .explain-field {
+      display: none;
+      margin-top: 3px;
+      font-size: 0.75rem;
+    }
+
+    .explain-field textarea {
+      width: 100%;
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 0.8rem;
+    }
+
+    .explain-field label {
+      font-size: 0.72rem;
+      color: #a33;
+      margin-bottom: 2px;
+      display: block;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 999px;
+      border: none;
+      background: var(--trevecca-purple);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .submit-btn:active {
+      opacity: 0.8;
+    }
+
+    #submitStatus {
+      font-size: 0.75rem;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    .footer-note {
+      font-size: 0.7rem;
+      color: #777;
+      text-align: center;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- enctype for photo uploads -->
+  <form
+    id="dhForm"
+    class="app"
+    action="https://formspree.io/f/movyvjwl"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <div class="header">
+      <h1 data-i18n="title_main">Trevecca Campus Dining</h1>
+      <h2 data-i18n="title_sub">DH Daily Supervisor Checklist</h2>
+
+      <div class="lang-toggle">
+        <button type="button" class="lang-btn active" data-lang="en">English</button>
+        <button type="button" class="lang-btn" data-lang="es">Español</button>
+        <button type="button" class="lang-btn" data-lang="ar">العربية</button>
+      </div>
+    </div>
+
+    <!-- Basic Info -->
+    <div class="card">
+      <div class="card-title" data-i18n="card_supervisor">Supervisor & Shift</div>
+      <div class="field-row">
+        <div class="field">
+          <label for="supName" data-i18n="lbl_supervisor">Supervisor name</label>
+          <input id="supName" name="supervisor_name" type="text" />
+        </div>
+        <div class="field">
+          <label for="date" data-i18n="lbl_date">Date</label>
+          <input id="date" name="date" type="date" />
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="shift" data-i18n="lbl_shift">Shift</label>
+          <select id="shift" name="shift">
+            <option value="" data-i18n="opt_shift_select">Select shift</option>
+            <option value="Breakfast" data-i18n="opt_shift_breakfast">Breakfast</option>
+            <option value="Lunch" data-i18n="opt_shift_lunch">Lunch</option>
+            <option value="Dinner" data-i18n="opt_shift_dinner">Dinner</option>
+            <option value="Late Night" data-i18n="opt_shift_late">Late Night</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cleaning & Equipment -->
+    <div class="card" data-group="Cleaning & Equipment">
+      <div class="card-title" data-i18n="card_cleaning_title">Cleaning & Equipment</div>
+      <div class="card-subtitle" data-i18n="card_cleaning_sub">
+        End-of-shift cleaning of cooking equipment, floors, and key surfaces.
+      </div>
+      <div class="checklist">
+
+        <div class="check-item">
+          <label>Stainless steel wiped down</label>
+          <div class="pill-group">
+            <input type="hidden" name="clean_stainless" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Grill cleaned</label>
+          <div class="pill-group">
+            <input type="hidden" name="clean_grill" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Griddle cleaned</label>
+          <div class="pill-group">
+            <input type="hidden" name="clean_griddle" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Counters wiped down and sanitized</label>
+          <div class="pill-group">
+            <input type="hidden" name="clean_counters" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Fryer baskets washed</label>
+          <div class="pill-group">
+            <input type="hidden" name="clean_fryer_baskets" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Glass cleaned</label>
+          <div class="pill-group">
+            <input type="hidden" name="clean_glass" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Warmers emptied and wiped down</label>
+          <div class="pill-group">
+            <input type="hidden" name="clean_warmers" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Reach-in coolers wiped; product labeled, dated, stored correctly
+            (no raw over ready-to-eat)</label>
+          <div class="pill-group">
+            <input type="hidden" name="clean_reachin_coolers" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>All non-refrigerated equipment turned off</label>
+          <div class="pill-group">
+            <input type="hidden" name="equip_off" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>All steam wells cleaned and refilled</label>
+          <div class="pill-group">
+            <input type="hidden" name="clean_steamwells" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Floors swept and mopped</label>
+          <div class="pill-group">
+            <input type="hidden" name="clean_floors" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="photos_cleaning" data-i18n="lbl_photos_cleaning">
+          Upload photos – cleaning & equipment
+        </label>
+        <input
+          id="photos_cleaning"
+          name="photos_cleaning"
+          type="file"
+          accept="image/*"
+          multiple
+          capture="environment"
+        />
+      </div>
+      <div class="field">
+        <label for="comments_cleaning" data-i18n="lbl_comments_cleaning">
+          Comments – cleaning & equipment
+        </label>
+        <textarea id="comments_cleaning" name="comments_cleaning" rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- Prep & Station Restocking (Food) -->
+    <div class="card" data-group="Prep & Station Restocking">
+      <div class="card-title" data-i18n="card_prep_title">
+        Prep & Station Restocking (Food)
+      </div>
+      <div class="card-subtitle" data-i18n="card_prep_sub">
+        Food items and stations prepared and stocked for the next service.
+      </div>
+      <div class="checklist">
+
+        <div class="check-item">
+          <label>Salad bar restocked with backup of every major ingredient in reach-in cooler</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_salad_bar" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Condiment dispensers/bottles clean and restocked</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_condiments" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Deli restocked; meat sliced</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_deli" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Deli salad made</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_deli_salad" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Burger bar items restocked (lettuce, tomato, onion, pickles)</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_burger_bar" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Reach-in freezer stocked with next-day items & French fries</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_reachin_freezer" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Fruit trays refilled (bananas, apples, oranges)</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_fruit_trays" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Yogurt bar prepped (two yogurts, fruit, granola)</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_yogurt_bar" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>20 pizzas prepared for next day (12 pepperoni, 8 cheese)</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_pizza" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Showcase items prepped (starch, veg, protein, sauce, garnish)</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_showcase" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Simple Servings items prepped (starch, veg, protein, sauce, garnish);
+            chicken & potatoes in cooler for finishing; salad & fruit cut</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_simple_servings" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>All cereal items filled and properly labeled</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_cereal" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Gluten-free bread/roll restocked</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_gluten_free_bread" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Regular English muffins, bread, bagels restocked at station</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_regular_bread" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Pasta cooked for next day</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_pasta" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Pre-made sandwiches available in cooler</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_sandwiches" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Desserts in cooler in-date and appealing</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_desserts" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>All items being saved labeled and dated in cooler</label>
+          <div class="pill-group">
+            <input type="hidden" name="prep_labeled_saved_items" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="photos_prep" data-i18n="lbl_photos_prep">
+          Upload photos – prep & station restocking
+        </label>
+        <input
+          id="photos_prep"
+          name="photos_prep"
+          type="file"
+          accept="image/*"
+          multiple
+          capture="environment"
+        />
+      </div>
+      <div class="field">
+        <label for="comments_prep" data-i18n="lbl_comments_prep">
+          Comments – prep & station restocking
+        </label>
+        <textarea id="comments_prep" name="comments_prep" rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- Beverages & Frozen Treats -->
+    <div class="card" data-group="Beverages & Frozen Treats">
+      <div class="card-title" data-i18n="card_bev_title">Beverages & Frozen Treats</div>
+      <div class="card-subtitle" data-i18n="card_bev_sub">
+        Coffee, milk, soda, juice, ice cream, and specialty drink stations.
+      </div>
+      <div class="checklist">
+
+        <div class="check-item">
+          <label>Ice cream machine refilled OR cleaned and broken down</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_icecream" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Milk refilled</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_milk" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Coffee prepared (grounds loaded; urns cleaned)</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_coffee_prep" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Coffee condiments restocked and ready</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_coffee_condiments" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Coffee mugs out at station</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_mugs" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Creamer refilled</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_creamer" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Soy milk refilled</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_soymilk" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Juice machine full</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_juice_machine" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Coke machine nozzles removed and cleaned</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_coke_nozzles" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>“Spa” water dispenser removed, cleaned, replaced for next day</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_spa_water" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Coke dispenser in back full; items replaced as needed</label>
+          <div class="pill-group">
+            <input type="hidden" name="bev_coke_back" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="photos_bev" data-i18n="lbl_photos_bev">
+          Upload photos – beverages & frozen treats
+        </label>
+        <input
+          id="photos_bev"
+          name="photos_bev"
+          type="file"
+          accept="image/*"
+          multiple
+          capture="environment"
+        />
+      </div>
+      <div class="field">
+        <label for="comments_bev" data-i18n="lbl_comments_bev">
+          Comments – beverages & frozen treats
+        </label>
+        <textarea id="comments_bev" name="comments_bev" rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- Dining Room & Guest Areas -->
+    <div class="card" data-group="Dining Room & Guest Areas">
+      <div class="card-title" data-i18n="card_dining_title">Dining Room & Guest Areas</div>
+      <div class="card-subtitle" data-i18n="card_dining_sub">
+        Tables, guest-facing stations, and disposables fully reset.
+      </div>
+      <div class="checklist">
+
+        <div class="check-item">
+          <label>Tables cleaned and put back together</label>
+          <div class="pill-group">
+            <input type="hidden" name="din_tables" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>All trash taken out; trash cans clean and bags replaced</label>
+          <div class="pill-group">
+            <input type="hidden" name="din_trash" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Silverware restocked at each station</label>
+          <div class="pill-group">
+            <input type="hidden" name="din_silverware" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Plates restocked at each station</label>
+          <div class="pill-group">
+            <input type="hidden" name="din_plates" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Napkin dispensers full and tables neat</label>
+          <div class="pill-group">
+            <input type="hidden" name="din_napkins" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Cups restocked at drink stations</label>
+          <div class="pill-group">
+            <input type="hidden" name="din_cups" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="photos_dining" data-i18n="lbl_photos_dining">
+          Upload photos – dining room & guest areas
+        </label>
+        <input
+          id="photos_dining"
+          name="photos_dining"
+          type="file"
+          accept="image/*"
+          multiple
+          capture="environment"
+        />
+      </div>
+      <div class="field">
+        <label for="comments_dining" data-i18n="lbl_comments_dining">
+          Comments – dining room & guest areas
+        </label>
+        <textarea id="comments_dining" name="comments_dining" rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- Dishroom & Sinks -->
+    <div class="card" data-group="Dishroom & Sinks">
+      <div class="card-title" data-i18n="card_dish_title">Dishroom & Sinks</div>
+      <div class="card-subtitle" data-i18n="card_dish_sub">
+        Dish machine, sinks, floors, drains, and hand sinks closed down properly.
+      </div>
+      <div class="checklist">
+
+        <div class="check-item">
+          <label>All dishes moved to dish room</label>
+          <div class="pill-group">
+            <input type="hidden" name="dish_dishes_in_room" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Dish machine broken down and cleaned</label>
+          <div class="pill-group">
+            <input type="hidden" name="dish_machine_cleaned" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Dish sinks drained and cleaned</label>
+          <div class="pill-group">
+            <input type="hidden" name="dish_sinks_cleaned" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Dish room trash removed; stainless steel wiped down</label>
+          <div class="pill-group">
+            <input type="hidden" name="dish_trash_ss" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>Dish room floor deck-brushed; floor drains clean; wash-n-walk poured</label>
+          <div class="pill-group">
+            <input type="hidden" name="dish_floor_drains" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <label>All hand sinks stocked with soap, paper towels, trash can</label>
+          <div class="pill-group">
+            <input type="hidden" name="dish_hand_sinks" />
+            <div class="pill" data-value="Complete">Complete</div>
+            <div class="pill" data-value="Partial">Partial</div>
+            <div class="pill" data-value="Not done">Not done</div>
+            <div class="pill" data-value="N/A">N/A</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label for="photos_dish" data-i18n="lbl_photos_dish">
+          Upload photos – dishroom & sinks
+        </label>
+        <input
+          id="photos_dish"
+          name="photos_dish"
+          type="file"
+          accept="image/*"
+          multiple
+          capture="environment"
+        />
+      </div>
+      <div class="field">
+        <label for="comments_dish" data-i18n="lbl_comments_dish">
+          Comments – dishroom & sinks
+        </label>
+        <textarea id="comments_dish" name="comments_dish" rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- Additional Notes -->
+    <div class="card">
+      <div class="card-title" data-i18n="card_notes_title">
+        Additional Notes / Follow-up
+      </div>
+      <div class="field">
+        <label for="comments_global" data-i18n="lbl_notes">
+          Notes, issues, or follow-up needed
+        </label>
+        <textarea id="comments_global" name="comments_global" rows="3"></textarea>
+      </div>
+    </div>
+
+    <!-- Hidden summary for Formspree -->
+    <textarea id="messageField" name="message" style="display:none;"></textarea>
+    <input type="hidden" name="_subject" value="Trevecca DH Daily Checklist" />
+    <input type="hidden" id="langField" name="language" value="en" />
+
+    <button class="submit-btn" id="submitBtn" type="button" data-i18n="btn_submit">
+      Submit & Email Report
+    </button>
+    <div id="submitStatus"></div>
+
+    <div class="footer-note" data-i18n="footer_note">
+      Tip: Add this page to your phone home screen to use it like an app.
+    </div>
+  </form>
+
+  <script>
+    // Simple translation dictionary (UI)
+    const i18n = {
+      en: {
+        title_main: "Trevecca Campus Dining",
+        title_sub: "DH Daily Supervisor Checklist",
+        card_supervisor: "Supervisor & Shift",
+        lbl_supervisor: "Supervisor name",
+        lbl_date: "Date",
+        lbl_shift: "Shift",
+        opt_shift_select: "Select shift",
+        opt_shift_breakfast: "Breakfast",
+        opt_shift_lunch: "Lunch",
+        opt_shift_dinner: "Dinner",
+        opt_shift_late: "Late Night",
+        card_cleaning_title: "Cleaning & Equipment",
+        card_cleaning_sub: "End-of-shift cleaning of cooking equipment, floors, and key surfaces.",
+        lbl_photos_cleaning: "Upload photos – cleaning & equipment",
+        lbl_comments_cleaning: "Comments – cleaning & equipment",
+        card_prep_title: "Prep & Station Restocking (Food)",
+        card_prep_sub: "Food items and stations prepared and stocked for the next service.",
+        lbl_photos_prep: "Upload photos – prep & station restocking",
+        lbl_comments_prep: "Comments – prep & station restocking",
+        card_bev_title: "Beverages & Frozen Treats",
+        card_bev_sub: "Coffee, milk, soda, juice, ice cream, and specialty drink stations.",
+        lbl_photos_bev: "Upload photos – beverages & frozen treats",
+        lbl_comments_bev: "Comments – beverages & frozen treats",
+        card_dining_title: "Dining Room & Guest Areas",
+        card_dining_sub: "Tables, guest-facing stations, and disposables fully reset.",
+        lbl_photos_dining: "Upload photos – dining room & guest areas",
+        lbl_comments_dining: "Comments – dining room & guest areas",
+        card_dish_title: "Dishroom & Sinks",
+        card_dish_sub: "Dish machine, sinks, floors, drains, and hand sinks closed down properly.",
+        lbl_photos_dish: "Upload photos – dishroom & sinks",
+        lbl_comments_dish: "Comments – dishroom & sinks",
+        card_notes_title: "Additional Notes / Follow-up",
+        lbl_notes: "Notes, issues, or follow-up needed",
+        btn_submit: "Submit & Email Report",
+        footer_note: "Tip: Add this page to your phone home screen to use it like an app."
+      },
+      es: {
+        title_main: "Trevecca Comedor del Campus",
+        title_sub: "Lista diaria del supervisor DH",
+        card_supervisor: "Supervisor y turno",
+        lbl_supervisor: "Nombre del supervisor",
+        lbl_date: "Fecha",
+        lbl_shift: "Turno",
+        opt_shift_select: "Seleccione turno",
+        opt_shift_breakfast: "Desayuno",
+        opt_shift_lunch: "Almuerzo",
+        opt_shift_dinner: "Cena",
+        opt_shift_late: "Noche",
+        card_cleaning_title: "Limpieza y equipo",
+        card_cleaning_sub: "Limpieza al final del turno de equipos, pisos y superficies clave.",
+        lbl_photos_cleaning: "Subir fotos – limpieza y equipo",
+        lbl_comments_cleaning: "Comentarios – limpieza y equipo",
+        card_prep_title: "Preparación y reabastecimiento (alimentos)",
+        card_prep_sub: "Alimentos y estaciones preparados y listos para el siguiente servicio.",
+        lbl_photos_prep: "Subir fotos – preparación y reabastecimiento",
+        lbl_comments_prep: "Comentarios – preparación y reabastecimiento",
+        card_bev_title: "Bebidas y postres fríos",
+        card_bev_sub: "Café, leche, refrescos, jugos, helado y bebidas especiales.",
+        lbl_photos_bev: "Subir fotos – bebidas y postres fríos",
+        lbl_comments_bev: "Comentarios – bebidas y postres fríos",
+        card_dining_title: "Comedor y áreas de clientes",
+        card_dining_sub: "Mesas y estaciones listas con desechables completos.",
+        lbl_photos_dining: "Subir fotos – comedor y áreas de clientes",
+        lbl_comments_dining: "Comentarios – comedor y áreas de clientes",
+        card_dish_title: "Lavado de platos y lavabos",
+        card_dish_sub: "Máquina de platos، lavabos، pisos y drenajes cerrados correctamente.",
+        lbl_photos_dish: "Subir fotos – área de lavado y lavabos",
+        lbl_comments_dish: "Comentarios – área de lavado y lavabos",
+        card_notes_title: "Notas adicionales / seguimiento",
+        lbl_notes: "Notas, problemas o seguimiento necesario",
+        btn_submit: "Enviar y enviar informe por correo",
+        footer_note: "Consejo: agregue esta página a la pantalla de inicio de su teléfono para usarla como una app."
+      },
+      ar: {
+        title_main: "خدمة الطعام في تريفكا",
+        title_sub: "نموذج المتابعة اليومي لمشرف DH",
+        card_supervisor: "المشرف والوردية",
+        lbl_supervisor: "اسم المشرف",
+        lbl_date: "التاريخ",
+        lbl_shift: "الوردية",
+        opt_shift_select: "اختر الوردية",
+        opt_shift_breakfast: "فطور",
+        opt_shift_lunch: "غداء",
+        opt_shift_dinner: "عشاء",
+        opt_shift_late: "متأخرة",
+        card_cleaning_title: "التنظيف والمعدات",
+        card_cleaning_sub: "تنظيف المعدات والأرضيات والأسطح في نهاية الوردية.",
+        lbl_photos_cleaning: "حمّل صوراً – التنظيف والمعدات",
+        lbl_comments_cleaning: "ملاحظات – التنظيف والمعدات",
+        card_prep_title: "التحضير وإعادة التزويد (الأطعمة)",
+        card_prep_sub: "تحضير الأطعمة والمحطات لليوم / الخدمة التالية.",
+        lbl_photos_prep: "حمّل صوراً – التحضير وإعادة التزويد",
+        lbl_comments_prep: "ملاحظات – التحضير وإعادة التزويد",
+        card_bev_title: "المشروبات والحلويات المجمدة",
+        card_bev_sub: "القهوة، الحليب، العصائر، المشروبات الغازية والآيس كريم.",
+        lbl_photos_bev: "حمّل صوراً – المشروبات والحلويات المجمدة",
+        lbl_comments_bev: "ملاحظات – المشروبات والحلويات المجمدة",
+        card_dining_title: "صالة الطعام ومناطق الضيوف",
+        card_dining_sub: "تجهيز الطاولات والمحطات الأمامية بالكامل.",
+        lbl_photos_dining: "حمّل صوراً – صالة الطعام ومناطق الضيوف",
+        lbl_comments_dining: "ملاحظات – صالة الطعام ومناطق الضيوف",
+        card_dish_title: "غرفة الغسيل والأحواض",
+        card_dish_sub: "إغلاق صحيح لغرفة غسيل الصحون والأحواض والأرضيات والمصارف.",
+        lbl_photos_dish: "حمّل صوراً – غرفة الغسيل والأحواض",
+        lbl_comments_dish: "ملاحظات – غرفة الغسيل والأحواض",
+        card_notes_title: "ملاحظات إضافية / متابعة",
+        lbl_notes: "ملاحظات أو مشاكل أو أمور تحتاج متابعة",
+        btn_submit: "إرسال النموذج عبر البريد الإلكتروني",
+        footer_note: "نصيحة: أضف هذه الصفحة إلى شاشة هاتفك الرئيسية لاستخدامها كتطبيق."
+      }
+    };
+
+    function setLanguage(lang) {
+      const dict = i18n[lang] || i18n.en;
+      document.getElementById("langField").value = lang;
+
+      if (lang === "ar") {
+        document.documentElement.lang = "ar";
+        document.body.dir = "rtl";
+      } else {
+        document.documentElement.lang = lang;
+        document.body.dir = "ltr";
+      }
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) el.textContent = dict[key];
+      });
+
+      document.querySelectorAll("option[data-i18n]").forEach(opt => {
+        const key = opt.getAttribute("data-i18n");
+        if (dict[key]) opt.textContent = dict[key];
+      });
+    }
+
+    // Language toggle buttons
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".lang-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const lang = btn.getAttribute("data-lang");
+        setLanguage(lang);
+      });
+    });
+
+    // Add explanation fields to each checklist item dynamically
+    function setupExplanationFields() {
+      document.querySelectorAll(".check-item").forEach(item => {
+        const hidden = item.querySelector(".pill-group input[type='hidden']");
+        if (!hidden) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "explain-field";
+
+        const label = document.createElement("label");
+        label.textContent = "Explanation (required if Partial or Not done):";
+
+        const textarea = document.createElement("textarea");
+        textarea.name = hidden.name + "_explanation";
+        textarea.rows = 2;
+        textarea.placeholder = "Describe why it is Partial or Not done";
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(textarea);
+        item.appendChild(wrapper);
+      });
+    }
+
+    // Pill selection logic
+    document.addEventListener("click", e => {
+      const pill = e.target.closest(".pill");
+      if (!pill) return;
+      const group = pill.closest(".pill-group");
+      if (!group) return;
+
+      group.querySelectorAll(".pill").forEach(p => p.classList.remove("selected"));
+      pill.classList.add("selected");
+
+      const hidden = group.querySelector('input[type="hidden"]');
+      if (hidden) {
+        hidden.value = pill.dataset.value || pill.textContent.trim();
+        const checkItem = group.closest(".check-item");
+        const explainWrap = checkItem.querySelector(".explain-field");
+        const explainTextarea = explainWrap ? explainWrap.querySelector("textarea") : null;
+
+        if (hidden.value === "Partial" || hidden.value === "Not done") {
+          if (explainWrap) explainWrap.style.display = "block";
+        } else {
+          if (explainWrap) {
+            explainWrap.style.display = "none";
+            if (explainTextarea) explainTextarea.value = "";
+          }
+        }
+      }
+    });
+
+    function buildSummary() {
+      const getVal = id => (document.getElementById(id)?.value || "").trim();
+
+      const supName = getVal("supName");
+      const date = getVal("date");
+      const shift = getVal("shift");
+      const commentsGlobal = getVal("comments_global");
+      const lang = document.getElementById("langField").value || "en";
+
+      const groupSummaries = [];
+
+      document.querySelectorAll(".card[data-group]").forEach(card => {
+        const groupName = card.getAttribute("data-group");
+        const items = card.querySelectorAll(".check-item");
+        const groupCommentId = {
+          "Cleaning & Equipment": "comments_cleaning",
+          "Prep & Station Restocking": "comments_prep",
+          "Beverages & Frozen Treats": "comments_bev",
+          "Dining Room & Guest Areas": "comments_dining",
+          "Dishroom & Sinks": "comments_dish"
+        }[groupName];
+
+        const groupComment = groupCommentId
+          ? (document.getElementById(groupCommentId)?.value || "").trim()
+          : "";
+
+        const lines = [];
+        items.forEach(item => {
+          const labelEl = item.querySelector("label");
+          const hidden = item.querySelector(".pill-group input[type='hidden']");
+          const explainWrap = item.querySelector(".explain-field");
+          const explainTextarea = explainWrap ? explainWrap.querySelector("textarea") : null;
+
+          if (!labelEl || !hidden) return;
+          const label = labelEl.textContent.trim();
+          const status = hidden.value || "(no selection)";
+          lines.push(`- ${label}: ${status}`);
+
+          if (explainTextarea && explainTextarea.value.trim()) {
+            lines.push(`  Explanation: ${explainTextarea.value.trim()}`);
+          }
+        });
+
+        const photoInputId = {
+          "Cleaning & Equipment": "photos_cleaning",
+          "Prep & Station Restocking": "photos_prep",
+          "Beverages & Frozen Treats": "photos_bev",
+          "Dining Room & Guest Areas": "photos_dining",
+          "Dishroom & Sinks": "photos_dish"
+        }[groupName];
+
+        let photoNames = "";
+        if (photoInputId) {
+          const input = document.getElementById(photoInputId);
+          if (input && input.files && input.files.length) {
+            const names = Array.from(input.files).map(f => f.name);
+            photoNames = names.join(", ");
+          }
+        }
+
+        let groupText = `${groupName}\n------------------\n${lines.join("\n")}`;
+        if (groupComment) {
+          groupText += `\nComments: ${groupComment}`;
+        }
+        if (photoNames) {
+          groupText += `\nPhotos: ${photoNames}`;
+        }
+
+        groupSummaries.push(groupText);
+      });
+
+      return `
+Trevecca DH Daily Supervisor Checklist
+
+Supervisor / Shift
+------------------
+Supervisor: ${supName}
+Date: ${date}
+Shift: ${shift}
+Language: ${lang}
+
+${groupSummaries.join("\n\n")}
+
+Additional Notes / Follow-up
+----------------------------
+${commentsGlobal || "(none)"}
+`.trim();
+    }
+
+    function validateExplanations() {
+      let valid = true;
+      const statusEl = document.getElementById("submitStatus");
+      statusEl.textContent = "";
+
+      document.querySelectorAll(".check-item").forEach(item => {
+        const hidden = item.querySelector(".pill-group input[type='hidden']");
+        const explainWrap = item.querySelector(".explain-field");
+        const explainTextarea = explainWrap ? explainWrap.querySelector("textarea") : null;
+
+        if (!hidden || !explainTextarea) return;
+
+        const needsExplanation = hidden.value === "Partial" || hidden.value === "Not done";
+        if (needsExplanation) {
+          explainWrap.style.display = "block";
+          if (!explainTextarea.value.trim()) {
+            valid = false;
+            explainTextarea.style.borderColor = "#c00";
+          } else {
+            explainTextarea.style.borderColor = "#ddd";
+          }
+        } else {
+          explainTextarea.style.borderColor = "#ddd";
+        }
+      });
+
+      if (!valid) {
+        statusEl.style.color = "#c00";
+        statusEl.textContent = "Please explain all items marked Partial or Not done.";
+      }
+
+      return valid;
+    }
+
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      const statusEl = document.getElementById("submitStatus");
+
+      if (!validateExplanations()) {
+        return;
+      }
+
+      statusEl.style.color = "#555";
+      statusEl.textContent = "Submitting...";
+
+      const summary = buildSummary();
+      document.getElementById("messageField").value = summary;
+
+      document.getElementById("dhForm").submit();
+    });
+
+    // Initialize explanations and language on load
+    setupExplanationFields();
+    setLanguage("en");
+  </script>
+</body>
+</html>
